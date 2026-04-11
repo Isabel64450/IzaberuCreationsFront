@@ -1,7 +1,7 @@
 import { useState } from "react";
-import axiosInstance from "../api/axiosInstance";
+import axiosInstance from "../../api/axiosInstance";
 import { useNavigate } from "react-router-dom";
-import "../styles/login.css"
+import "../../styles/login.css"
 export default function ForgotPassword(){
     const [email, setEmail] = useState('');
     const [message, setMessage] =useState('');

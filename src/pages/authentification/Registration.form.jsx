@@ -1,8 +1,8 @@
 import {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
-import abyssin from '../images/Abyssin.png'
-import '../styles/formulaires.css'
-import axiosInstance from '../api/axiosInstance.js'
+import abyssin from '../../images/Abyssin.png'
+import '../../styles/formulaires.css'
+import axiosInstance from '../../api/axiosInstance.js'
 const registrationForm = () => {
     const [form, setForm]=useState({
         userName:'',

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { useAuth } from '../contex/AuthContext';
+import { useAuth } from '../../contex/AuthContext';
 import { useNavigate,useSearchParams, Link } from 'react-router-dom';
-import axiosInstance from '../api/axiosInstance'; 
-import "../styles/login.css"
+import axiosInstance from '../../api/axiosInstance'; 
+import "../../styles/login.css"
 
 const LoginForm =() => {
   

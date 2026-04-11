@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom'
 import './index.css'
 import App from './App.jsx'
-import RegistrationForm from '../src/pages/registration.form.jsx'
-import Bentos from "../src/pages/Bentos.jsx"
-import LoginForm from "../src/pages/login.jsx"
-import ForgotPassword from './pages/ForgotPassword.jsx'
-import ResetPassword from './pages/ResetPassword.jsx'
-import CreateProduct from './pages/CreatedProduct.jsx'
+import RegistrationForm from './pages/authentification/Registration.form.jsx'
+import Home from "../src/pages/Home.jsx"
+import LoginForm from "./pages/authentification/Login.jsx"
+import ForgotPassword from './pages/authentification/ForgotPassword.jsx'
+import ResetPassword from './pages/authentification/ResetPassword.jsx'
+import CreateProduct from './pages/adminPages/CreatedProduct.jsx'
 import Gallery from './pages/Gallery.jsx'
 import { AuthProvider } from '../src/contex/AuthContext.jsx'
 import ProductDetail from './pages/ProductDetail.jsx'
@@ -21,7 +21,7 @@ const EmptyLayout =() => <Outlet />
 const router = createBrowserRouter([
 {path:'/',element: <App/>,
   children:[
-    {index: true, element: <Bentos/>},
+    {index: true, element: <Home/>},
     {path:"login", element: <LoginForm/>},
     {path: '/forgot-password',element: <ForgotPassword/>},
     { path: '/reset-password/:token', element: <ResetPassword/> },

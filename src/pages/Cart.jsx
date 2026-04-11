@@ -68,61 +68,120 @@ const updateQuantity = async (itemId, newQty) => {
       }
     }
     fetchCartItems();
-  }, []);
+  }, [fetchItemCount]);
 
   if (loading || authLoading) return <p>Chargement...</p>;
 
-  const handleCheckout = async () => {
-    if (!isAuthenticated) {
-      localStorage.setItem('checkout_pending', 'true');
-      alert("Vous devez vous connecter avant de commander.");
-      navigate('/login');
-    } else {
-      navigate('/checkout');
-    }
-  };
- 
+  const handleCheckout = () => {
+  navigate('/checkout');
+};
   const total = cartItems.reduce((sum, item) => {
     return sum + parseFloat(item.unit_price) * (item.quantity || 1);
   }, 0);
 
   if (loading) return <p>Chargement du panier...</p>;
   if (error) return <p>{error}</p>;
-  if (cartItems.length === 0) return <p>Votre panier est vide.</p>;
+  const isEmpty = cartItems.length === 0;
 
-  return (
-     <div className="cart-container">
-      <h1>Mon Panier</h1>
-      <ul className="cart-items-list">
-        {cartItems.map(item => (
-          <li key={item.cart_item_id} className="cart-item">
-            <img src={item.image || '/default-product.png'} alt={item.product_name || 'Produit'} width={80} />
-            <div className="cart-item-info">
-              <p>{item.product_name}</p>
-              <p>Prix unitaire : {item.unit_price} €</p>
-              
-              <p className="cart-item-total">Total : {(parseFloat(item.unit_price) * (item.quantity || 1)).toFixed(2)} €</p>
-            </div>
-            <div className="cart-item-actions">
-             <div className="cart-quantity-controls">
-                <button
-                  onClick={() => updateQuantity(item.cart_item_id, item.quantity - 1)}
-                  
-                >-</button>
-                <span>{item.quantity}</span>
-                <button
-                  onClick={() => updateQuantity(item.cart_item_id, item.quantity + 1)}
-                  disabled={item.quantity >= item.stock} 
-                >+</button>
+ return (
+  <div className="min-h-screen flex flex-col bg-[#cad2c5] px-6 py-24 text-[#2f3e46]">
+
+    <div className="flex-1 max-w-5xl mx-auto w-full">
+
+      
+      <h1 className="text-3xl font-bold mb-10 text-center">
+        Mon Panier
+      </h1>
+
+      
+      {cartItems.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+          <h2 className="text-xl font-semibold mb-2">
+            Votre panier est vide 
+          </h2>
+         
+        </div>
+      ) : (
+        <>
+          
+          <div className="space-y-6">
+
+            {cartItems.map(item => (
+              <div
+                key={item.cart_item_id}
+                className="flex items-center gap-6 bg-white/60 backdrop-blur-md p-4 rounded-2xl shadow-sm"
+              >
+
+                
+                <img
+                  src={item.image || "/default-product.png"}
+                  className="w-24 h-24 object-cover rounded-xl"
+                  alt={item.product_name}
+                />
+
+                
+                <div className="flex-1">
+                  <h3 className="font-semibold text-lg">
+                    {item.product_name}
+                  </h3>
+
+                  <p className="text-[#52796f]">
+                    {item.unit_price} €
+                  </p>
+
+                  <p className="text-sm text-[#2f3e46]/70">
+                    Total : {(parseFloat(item.unit_price) * (item.quantity || 1)).toFixed(2)} €
+                  </p>
+                </div>
+
+                
+                <div className="flex items-center gap-2 bg-[#2f3e46] text-white rounded-xl px-3 py-1">
+
+                  <button
+                    onClick={() => updateQuantity(item.cart_item_id, item.quantity - 1)}
+                    className="px-2"
+                  >
+                    -
+                  </button>
+
+                  <span>{item.quantity}</span>
+
+                  <button
+                    onClick={() => updateQuantity(item.cart_item_id, item.quantity + 1)}
+                    className="px-2"
+                    disabled={item.quantity >= item.stock}
+                  >
+                    +
+                  </button>
+
+                </div>
+
               </div>
-            </div>
-          </li>
-        ))}
-      </ul>
-      <h2>Total général : {total.toFixed(2)} €</h2>
-      <button onClick={handleCheckout}>Commander</button>
+            ))}
+
+          </div>
+
+          
+          <div className="mt-10 text-right">
+
+            <h2 className="text-2xl font-bold">
+              Total : {total.toFixed(2)} €
+            </h2>
+
+            <button
+              onClick={handleCheckout}
+              className="mt-4 bg-[#52796f] text-white px-6 py-3 rounded-xl hover:bg-[#3d5f58] transition"
+            >
+              Commander
+            </button>
+
+          </div>
+        </>
+      )}
+
     </div>
-  );
+  </div>
+);
 }
 
 export default Cart;

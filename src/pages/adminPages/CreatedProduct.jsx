@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import axiosInstance from '../api/axiosInstance';
-import '../styles/createdProducts.css'
+import axiosInstance from '../../api/axiosInstance';
+import '../../styles/createdProducts.css'
 function CreateProduct() {
   
   const [form, setForm] = useState({

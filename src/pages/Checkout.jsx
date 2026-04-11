@@ -19,50 +19,51 @@ const { isAuthenticated, loading: authLoading} = useAuth();
 
   const checkout = async () => {
     try {
-        
-      if (!isAuthenticated) {
-        navigate('/login');
-        return;
-      }
+      let user = null;
 
-      const meRes = await axiosInstance.get('/users/me');
-      const user = meRes.data;
-     
-      if (!user?.id) {
-        navigate('/login');
-        return;
+      try {
+      const res = await axiosInstance.get('/users/me');
+      user = res.data;
+    } catch (err) {
+      if (err.response?.status !== 401) {
+        console.error(err);
       }
+    }
+
 
       const cartId = localStorage.getItem('cart_id');
       if (!cartId) {
-        setError("Aucun produit dans votre panier pour le moment. Explorez nos catégories et trouvez ce qui vous plaît !");
+        setError("Votre panier est vide.");
+        setLoading(false);
         return;
       }
 
+      
       const orderId = crypto.randomUUID();
-      const orderPayload = { orderId, user_id: user.id, cart_id: cartId };
+      const orderPayload = {
+        orderId, 
+        user_id: user?.id || null , 
+        cart_id: cartId };
       
       const orderRes = await axiosInstance.post('/orders', orderPayload);
 
       if (orderRes.status === 201) {
-        setOrderSuccess(true);
+        
         setOrderSuccess(true);
         setTimeout(()=>{
             clearCart();
-        localStorage.removeItem('cart_id');
-        fetchItemCount();
-        setIsCleared(true);
+            localStorage.removeItem('cart_id');
+            fetchItemCount();
+            setIsCleared(true);
     },4000);
         
       } else {
         setError("La commande n'a pas pu être créée.");
       }
     } catch (err) {
-      if (err.response?.status === 401) {
-        navigate('/login');
-      } else {
-        setError("Une erreur est survenue lors du traitement de votre commande.");
-      }
+      console.error(err);
+
+       setError("Une erreur est survenue lors du traitement de votre commande.");
     } finally {
       setLoading(false);
     }

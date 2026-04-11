@@ -70,58 +70,102 @@ if (error) return <p>{error}</p>;
 if (!product) return <p>Produit introuvable.</p>;
 
   return (
-     <div className="product-detail-container">
-     
+  <div className="min-h-screen bg-[#cad2c5] px-6 py-24 text-[#2f3e46]">
 
-      <div className="product-content">
+    <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12">
+
+      
+      <div className="space-y-4">
+
        
-        <div className="product-images">
-          <div className="main-image">
-            {selectedImage ? (
-              <img src={selectedImage} alt="Produit" />
-            ) : (
-              <p>Aucune image</p>
-            )}
-          </div>
-          <div className="thumbnails">
-            {product.images?.map((imgUrl, idx) => (
-              <img
-                key={idx}
-                src={imgUrl}
-                alt={`Miniature ${idx + 1}`}
-                className={selectedImage === imgUrl ? 'thumbnail selected' : 'thumbnail'}
-                onClick={() => setSelectedImage(imgUrl)}
-              />
-            ))}
-          </div>
+        <div className="rounded-2xl overflow-hidden bg-[#cad2c5] shadow-lg flex items-center justify-center h-[500px] relative">
+
+             {selectedImage ? ( <>     
+             <img src={selectedImage} alt="Produit" className="max-h-full max-w-full object-contain relative z-10"/>
+               </>
+                 ) : (
+               <div className="text-[#2f3e46]"> Aucune image</div>
+              )}
+
+        </div>
+
+       
+        <div className="flex gap-3 overflow-x-auto">
+          {product.images?.map((img, idx) => (
+            <img
+              key={idx}
+              src={img}
+              onClick={() => setSelectedImage(img)}
+              className={`w-20 h-20 object-cover rounded-lg cursor-pointer border-2 transition
+              ${selectedImage === img ? "border-[#52796f]" : "border-transparent opacity-70 hover:opacity-100"}`}
+            />
+          ))}
+        </div>
+      </div>
+
+      
+      <div className="space-y-6">
+
+        <div>
+          <h1 className="text-3xl font-bold">
+            {product.product_category_name}
+          </h1>
+
+          <p className="text-[#52796f] mt-1">
+            {product.category}
+          </p>
+        </div>
+
+        <p className="text-[#354f52] leading-relaxed">
+          {product.description}
+        </p>
+
+        
+        <div className="bg-white/40 p-4 rounded-xl space-y-2 text-sm">
+          <p>
+            <strong>Dimensions :</strong>{" "}
+            {product.product_lenght_cm} x {product.product_width_cm} x {product.product_height_cm} cm
+          </p>
+          <p>
+            <strong>Poids :</strong> {product.product_weight_g} g
+          </p>
         </div>
 
         
-        <div className="product-details">
-  <h1>{product.product_category_name}</h1>
-  <p className="product-category">Catégorie : {product.category}</p>
-  <p className="product-description">{product.description}</p>
+        <div className="text-2xl font-bold text-[#2f3e46]">
+          {product.price} €
+        </div>
 
-  <div className="product-meta">
-    <p><strong>Dimensions :</strong> {product.product_lenght_cm} x {product.product_width_cm} x {product.product_height_cm} cm</p>
-    <p><strong>Poids :</strong> {product.product_weight_g} g</p>
-  </div>
+       
+        <div className="flex flex-col gap-3">
 
-  <p className="product-price">Prix : {product.price} €</p>
+          <button
+            onClick={() => handleAddToCart(product)}
+            className="bg-[#52796f] text-white py-3 rounded-xl hover:bg-[#3d5f58] transition"
+          >
+            Ajouter au panier
+          </button>
 
-  <div className="add-to-cart">
-    <button onClick={() => handleAddToCart(product)}>Ajouter au panier</button>
-     <Link to="/cart">
-  <button>Voir le panier</button>
-</Link> 
- <Link to="/gallery">
- <button>Retour au galerie</button>
- </Link>
-  </div>
-</div>
+          <Link
+            to="/cart"
+            className="text-center border border-[#52796f] py-3 rounded-xl hover:bg-[#52796f] hover:text-white transition"
+          >
+            Voir le panier
+          </Link>
+
+          <Link
+            to="/gallery"
+            className="text-center text-[#52796f] hover:underline"
+          >
+            ← Retour à la galerie
+          </Link>
+
+        </div>
       </div>
+
     </div>
-  );
+  </div>
+);
    
 }
 
