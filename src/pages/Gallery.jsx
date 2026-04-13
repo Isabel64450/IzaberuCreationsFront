@@ -4,14 +4,20 @@ import { Link } from "react-router-dom";
 
 function Gallery() {
   const [products, setProducts] = useState([]);
+  const [page, setPage] = useState(1);
+const [totalPages, setTotalPages] = useState(1);
+const limit = 8;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const response = await axiosInstance.get("/products");
-        setProducts(response.data);
+        setLoading(true);
+        const response = await axiosInstance.get(`/products?page=${page}&limit=${limit}`);
+        setProducts(response.data.data);
+        const total = response.data.total
+        setTotalPages(Math.ceil(total/limit));
       } catch (err) {
         setError("Erreur lors du chargement des produits");
       } finally {
@@ -20,7 +26,7 @@ function Gallery() {
     }
 
     fetchProducts();
-  }, []);
+  }, [page]);
 
   if (loading)
     return (
@@ -77,6 +83,26 @@ function Gallery() {
           );
         })}
       </div>
+      <div className="flex justify-center items-center gap-2 mt-10">
+        <button
+          onClick={() => setPage((p) => Math.max(p - 1, 1))}
+          disabled={page === 1}
+          className="px-3 py-1 rounded bg-gray-200 disabled:opacity-40">
+          ←
+        </button>
+             {[...Array(totalPages)].map((_, i) => (
+        <button key={i} onClick={() => setPage(i + 1)} className={`px-3 py-1 rounded ${page === i + 1? "bg-[#2f3e46] text-white shadow-md" : "bg-gray-100 hover:bg-gray-200"}`}>
+             {i + 1}
+        </button>
+
+             ))}
+        <button onClick={() => setPage((p) => Math.min(p + 1, totalPages))} disabled={page === totalPages}  className="px-3 py-1 rounded bg-gray-200 disabled:opacity-40">
+         →
+        </button>
+
+
+      </div>
+
     </div>
   );
 }

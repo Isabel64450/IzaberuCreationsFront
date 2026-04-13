@@ -21,14 +21,14 @@ const { isAuthenticated, loading: authLoading} = useAuth();
     try {
       let user = null;
 
-      try {
-      const res = await axiosInstance.get('/users/me');
-      user = res.data;
-    } catch (err) {
-      if (err.response?.status !== 401) {
-        console.error(err);
-      }
-    }
+     if (isAuthenticated) {
+  try {
+    const res = await axiosInstance.get('/users/me');
+    user = res.data;
+  } catch (err) {
+    console.error(err);
+  }
+}
 
 
       const cartId = localStorage.getItem('cart_id');

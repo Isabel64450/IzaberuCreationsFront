@@ -5,19 +5,40 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true); 
 
-  useEffect(() => {
+const logout = async () => {
+  try {
+    await axiosInstance.get("/users/logout");
+  } catch (err) {
+    console.error(err);
+  }
+
+  setIsAuthenticated(false);
+  setUser(null); 
+};
+
+
+ const fetchUser = async () => {
+  try {
+    const res = await axiosInstance.get("/users/me");
+    setUser(res.data);
+    setIsAuthenticated(true);
+  } catch {
+    setUser(null);
+    setIsAuthenticated(false);
+  } finally {
+    setLoading(false);
+  }
+};
     
-    axiosInstance
-      .get("/users/me")
-      .then(() => setIsAuthenticated(true))
-      .catch(() => setIsAuthenticated(false))
-      .finally(() => setLoading(false));
-  }, []);
+   useEffect(() => {
+  fetchUser();
+}, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, loading }}>
+    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, user, setUser, fetchUser,logout,loading }}>
       {children}
     </AuthContext.Provider>
   );

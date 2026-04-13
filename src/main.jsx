@@ -8,13 +8,15 @@ import Home from "../src/pages/Home.jsx"
 import LoginForm from "./pages/authentification/Login.jsx"
 import ForgotPassword from './pages/authentification/ForgotPassword.jsx'
 import ResetPassword from './pages/authentification/ResetPassword.jsx'
-import CreateProduct from './pages/adminPages/CreatedProduct.jsx'
+import CreateProduct from './pages/adminPages/products/CreatedProduct.jsx'
 import Gallery from './pages/Gallery.jsx'
 import { AuthProvider } from '../src/contex/AuthContext.jsx'
 import ProductDetail from './pages/ProductDetail.jsx'
 import Cart from './pages/Cart.jsx'
 import { CartProvider } from './contex/CartContex'
 import Checkout from './pages/Checkout.jsx'
+import AdminProducts from './pages/adminPages/products/AdminProducts.jsx'
+import AdminEditProduct from './pages/adminPages/products/AdminEditProduct.jsx'
 
 const EmptyLayout =() => <Outlet />
 
@@ -34,7 +36,9 @@ const router = createBrowserRouter([
 },{
   element: <EmptyLayout/>,
   children:[{path:'/register', element:<RegistrationForm/>},
-    { path: 'add-product', element: <CreateProduct /> }
+    { path: '/admin/products/new', element: <CreateProduct /> },
+    {path: 'admin/products', element: <AdminProducts />},
+    {path: 'admin/products/:id', element: <AdminEditProduct/>}
     
    
 ]

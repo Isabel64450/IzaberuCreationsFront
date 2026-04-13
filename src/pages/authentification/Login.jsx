@@ -9,7 +9,8 @@ const LoginForm =() => {
 const [email, setEmail] = useState('');
 const [password, setPassword] = useState('');
 const [infoMessage, setInfoMessage] = useState('');
-const { setIsAuthenticated } = useAuth();
+const { setIsAuthenticated, fetchUser } = useAuth();
+
 const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -17,8 +18,10 @@ const navigate = useNavigate();
 
     try {
       const res = await axiosInstance.post('/users/login', { email, password });
-      alert(res.data.message);
+     
       setIsAuthenticated(true)
+       await fetchUser();
+       alert(res.data.message);
       navigate('/'); 
     } catch (err) {
       console.error('Erreur lors du login :', err);
