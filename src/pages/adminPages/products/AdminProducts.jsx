@@ -53,6 +53,7 @@ export default function AdminProducts() {
             <tr>
               <th>Image</th>
               <th>Nom</th>
+              <th>Format</th>
               <th>Prix</th>             
               <th>Actions</th>
             </tr>
@@ -70,6 +71,7 @@ export default function AdminProducts() {
                 </td>
 
                 <td>{p.product_category_name}</td>
+                <td>{p.art_format}</td>
                 <td>{p.price} €</td>
                 
 

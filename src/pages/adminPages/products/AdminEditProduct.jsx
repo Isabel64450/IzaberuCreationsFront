@@ -16,6 +16,7 @@ function EditProduct() {
     height: "",
     width: "",
     category: "",
+    art_format:""
     
   });
 
@@ -33,7 +34,7 @@ function EditProduct() {
         price: p.price,
         description: p.description,
         weight: p.product_weight_g,
-        length: p.product_lenght_cm,
+        length: p.product_length_cm,
         height: p.product_height_cm,
         width: p.product_width_cm,
         category: p.category,
@@ -128,8 +129,56 @@ function EditProduct() {
             onChange={handleChange}
             className="w-full border p-2 rounded"
           />
+               <div className="grid grid-cols-2 gap-4">
+  <input
+    name="weight"
+    value={form.weight}
+    onChange={handleChange}
+    placeholder="Poids"
+    className="border p-2 rounded"
+  />
 
+  <input
+    name="length"
+    value={form.length}
+    onChange={handleChange}
+    placeholder="Longueur"
+    className="border p-2 rounded"
+  />
+
+  <input
+    name="height"
+    value={form.height}
+    onChange={handleChange}
+    placeholder="Hauteur"
+    className="border p-2 rounded"
+  />
+
+  <input
+    name="width"
+    value={form.width}
+    onChange={handleChange}
+    placeholder="Largeur"
+    className="border p-2 rounded"
+  />
+</div>
          
+<select
+  name="art_format"
+  value={form.art_format}
+  onChange={handleChange}
+  className="w-full border p-2 rounded"
+>
+  <option value="">Format</option>
+  <option value="A5">A5</option>
+  <option value="A4">A4</option>
+  <option value="A3">A3</option>
+  <option value="A2">A2</option>
+</select>
+
+
+
+
           <div>
             <h3 className="font-semibold mb-2">Images actuelles</h3>
 

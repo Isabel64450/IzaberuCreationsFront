@@ -39,7 +39,16 @@ function CreateProduct() {
     }
 
     try {
-      const { data: product } = await axiosInstance.post("/products", form);
+      const payload = {
+      ...form,
+      price: parseFloat(form.price),
+      weight: parseFloat(form.weight),
+      length: parseFloat(form.length),
+      height: parseFloat(form.height),
+      width: parseFloat(form.width),
+      quantity: parseInt(form.quantity),
+    };
+      const { data: product } = await axiosInstance.post("/products", payload);
 
       const formData = new FormData();
       images.forEach(img => formData.append("images", img));
@@ -57,7 +66,9 @@ function CreateProduct() {
         height: "",
         width: "",
         category: "",
-        quantity: ""
+        quantity: "",
+        art_format:""
+        
       });
 
       setImages([]);
@@ -143,7 +154,15 @@ function CreateProduct() {
             <option value="Bijoux">Bijoux</option>
             <option value="Aquarelle">Aquarelle</option>
           </select>
-
+           <select
+              name="art_format" value={form.art_format} onChange={handleChange} className="w-full border rounded-lg px-4 py-2" required>
+                <option value="">Choisir un format</option>
+                <option value="A5">A5</option>
+                <option value="A4">A4</option>
+                <option value="A3">A3</option>
+                <option value="A2">A2</option>
+  
+            </select>
           
           <input
             type="file"

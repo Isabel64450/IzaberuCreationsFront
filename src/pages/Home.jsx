@@ -10,7 +10,7 @@ export default function Home() {
         className="absolute inset-0 w-full h-full object-cover"
       />
      
-      <div className="absolute inset-0 bg-[#2f3e46]/60"></div>
+      <div className="absolute inset-0 bg-[#2f3e46]/30"></div>
 
    
       <div className="relative z-10 text-white">

@@ -90,7 +90,7 @@ if (loading) {
               )}
               <div className="p-5">
                 <h4 className="text-lg font-bold">{event.title}</h4>
-                <p className="text-sm text-gray-500">{event.event_date}</p>
+                <p className="text-sm text-gray-500">{event.event_date?.split("T")[0]}</p>
                 <p className="text-sm">{event.description}</p>
               </div>
             </div>
@@ -113,7 +113,7 @@ if (loading) {
             )}
             <div className="p-5">
               <h4 className="text-lg font-bold">{event.title}</h4>
-              <p className="text-sm text-gray-500">{event.event_date}</p>
+              <p className="text-sm text-gray-500">{event.event_date?.split("T")[0]}</p>
               <p className="text-sm">{event.description}</p>
             </div>
           </div>

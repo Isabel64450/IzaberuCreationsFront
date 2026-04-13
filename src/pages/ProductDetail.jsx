@@ -121,15 +121,28 @@ if (!product) return <p>Produit introuvable.</p>;
         </p>
 
         
-        <div className="bg-white/40 p-4 rounded-xl space-y-2 text-sm">
-          <p>
-            <strong>Dimensions :</strong>{" "}
-            {product.product_lenght_cm} x {product.product_width_cm} x {product.product_height_cm} cm
+       <div className="bg-white/60 backdrop-blur-md p-5 rounded-2xl space-y-3 text-sm text-[#2f3e46] shadow-sm border border-white/30">
+           <p className="flex justify-between">
+              <span className="font-semibold">Format :</span>
+              <span className="bg-[#52796f] text-white px-2 py-0.5 rounded-md text-xs">
+                  {product.art_format || "Non défini"}
+              </span>
+           </p>
+
+  
+           <p className="flex justify-between">
+              <span className="font-semibold">Dimensions :</span>
+              <span> {product.product_length_cm} × {product.product_width_cm} × {product.product_height_cm} cm
+              </span>
           </p>
-          <p>
-            <strong>Poids :</strong> {product.product_weight_g} g
-          </p>
-        </div>
+
+  
+  <p className="flex justify-between">
+    <span className="font-semibold">Poids :</span>
+    <span>{product.product_weight_g} g</span>
+  </p>
+
+</div>
 
         
         <div className="text-2xl font-bold text-[#2f3e46]">

@@ -10,10 +10,10 @@ function HeaderCartIcon() {
   
 
   return (
-    <Link to="/cart" className="cart-icon">
+    <Link to="/cart" className="relative text-white hover:text-[#84a98c] transition">
       <FaShoppingCart size={22} />
       {itemCount > 0 && (
-        <span className="cart-badge">{itemCount}</span>
+        <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full">{itemCount}</span>
       )}
     </Link>
   );

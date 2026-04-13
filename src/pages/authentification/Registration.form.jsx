@@ -1,107 +1,169 @@
-import {useState} from 'react'
-import {useNavigate} from 'react-router-dom'
-import abyssin from '../../images/Abyssin.png'
-import '../../styles/formulaires.css'
-import axiosInstance from '../../api/axiosInstance.js'
-const registrationForm = () => {
-    const [form, setForm]=useState({
-        userName:'',
-        userLastName:'',
-        userEmail:'',
-        password:'',
-        confirmPassword: '',
-        number:'',
-        street:'',
-        complement:'',
-        city:'',
-        postalCode:''
-    })
-const navigate = useNavigate()
-const handleChange = (e) => {
-    setForm({...form, [e.target.name]: e.target.value})
-}
-const handleSubmit = async (e) => {
-  e.preventDefault();
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import abyssin from "../../images/Abyssin.png";
+import axiosInstance from "../../api/axiosInstance";
 
-  if (form.password !== form.confirmPassword) {
-    return alert("Les mots de passe ne correspondent pas.");
-  }
+const RegistrationForm = () => {
+  const [form, setForm] = useState({
+    userName: "",
+    userLastName: "",
+    userEmail: "",
+    password: "",
+    confirmPassword: "",
+    number: "",
+    street: "",
+    complement: "",
+    city: "",
+    postalCode: "",
+  });
 
-  const dataToSend = {
-  userName: form.userName,
-  userLastName: form.userLastName,
-  userEmail: form.userEmail,
-  password: form.password,
-  confirmPassword: form.confirmPassword, 
-  number: form.number,
-  street: form.street,
-  complement: form.complement,
-  city: form.city,
-  postalCode: form.postalCode
-};
-console.log("Form complet :", form);
-console.log("Données envoyées :", dataToSend);
-  
-  try {
-    console.log("Form data envoyée :", dataToSend);
+  const navigate = useNavigate();
 
-    const res = await axiosInstance.post('users/register', dataToSend);
-    alert(res.data.message);
-    navigate('/login');
-  } catch (err) {
-    console.error('Erreur détaillée axios:', err);
-    if (err.response) {
-      console.error('Status:', err.response.status);
-      console.error('Data:', err.response.data);
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (form.password !== form.confirmPassword) {
+      return alert("Les mots de passe ne correspondent pas.");
     }
-    alert('Erreur lors de l’inscription');
-  }
-};
 
-    return(
-    <div className="registration-container">
-      <div className="form-box">
-        <div className="left-side">
-          <div className="upload-photo">
-            <div className="circle">
-              <i className="fa-regular fa-circle-user"></i>
-            </div>
-          </div>
-          <p className="description"></p>
-          <div className="illustration">
-            <div className="books">
-              <img
-                src={abyssin}
-                alt="watercolor d'un jolie chat roux"
+    try {
+      await axiosInstance.post("/users/register", form);
+      alert("Compte créé !");
+      navigate("/login");
+    } catch (err) {
+      console.error(err);
+      alert("Erreur lors de l’inscription");
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[#cad2c5] px-4 py-10">
+      <div className="w-full max-w-5xl bg-white rounded-2xl shadow-xl overflow-hidden grid md:grid-cols-2">
+
+       
+        <div className="hidden md:flex flex-col justify-center items-center bg-[#2f3e46] p-6">
+          <img
+            src={abyssin}
+            alt="illustration"
+            className="rounded-xl object-cover w-full h-full"
+          />
+        </div>
+
+       
+        <div className="p-8">
+          <h1 className="text-3xl font-bold text-center mb-6 text-[#2f3e46]">
+            Compte client
+          </h1>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+
+           
+            <div className="grid grid-cols-2 gap-3">
+              <input
+                name="userName"
+                placeholder="Prénom"
+                onChange={handleChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-[#2f3e46] focus:outline-none focus:ring-2 focus:ring-[#52796f] shadow-sm"
+              />
+              <input
+                name="userLastName"
+                placeholder="Nom"
+                onChange={handleChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-[#2f3e46] focus:outline-none focus:ring-2 focus:ring-[#52796f] shadow-sm"
               />
             </div>
-          </div>
-        </div>
-        <div className="right-side">
-          <h1>Compte clients</h1>
-          <form onSubmit={handleSubmit}>
-            <div className="name-row">
-              <input type="text" name="userName" placeholder="Prenom" value={form.userName} onChange={handleChange} />
-              <input type="text" name="userLastName" placeholder="Nom" value={form.userLastName} onChange={handleChange} />
-              <input type="email" name="userEmail" placeholder="Email" value={form.userEmail} onChange={handleChange} />
-              <input type="password" name="password" placeholder="mot de pass" value={form.password} onChange={handleChange}/>
-            <input type="password" name="confirmPassword" placeholder="Confirmer mot de pass" value={form.confirmPassword} onChange={handleChange}/>
+
+            <input
+              name="userEmail"
+              type="email"
+              placeholder="Email"
+              onChange={handleChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-[#2f3e46] focus:outline-none focus:ring-2 focus:ring-[#52796f] shadow-sm"
+            />
+
+            <div className="grid grid-cols-2 gap-3">
+              <input
+                name="password"
+                type="password"
+                placeholder="Mot de passe"
+                onChange={handleChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-[#2f3e46] focus:outline-none focus:ring-2 focus:ring-[#52796f] shadow-sm"
+              />
+              <input
+                name="confirmPassword"
+                type="password"
+                placeholder="Confirmation"
+                onChange={handleChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-[#2f3e46] focus:outline-none focus:ring-2 focus:ring-[#52796f] shadow-sm"
+              />
             </div>
-            <h2>Adresse du client</h2>
-            <input type="text" name="number" placeholder="numero" value={form.number} onChange={handleChange} />
-            <input type="text" name="street" placeholder="Rue" value={form.street} onChange={handleChange}/>
-            <input type="text" name="complement" placeholder="Complement d'adress" value={form.complement} onChange={handleChange} />
-            <input type="text" name="city" placeholder="Ville" value={form.city} onChange={handleChange} />
-            <input type="number"name="postalCode" placeholder="Code Postal" value={form.postalCode} onChange={handleChange}/>
-            <div className="bouttons-rows">
-              <button type="submit">envoyer</button>
-              <button type="button" onClick={()=>navigate('/')}>Retour à l'Accueil</button>
+
+           
+            <h2 className="font-semibold text-[#2f3e46] mt-4">
+              Adresse
+            </h2>
+
+            <div className="grid grid-cols-2 gap-3">
+              <input
+                name="number"
+                placeholder="Numéro"
+                onChange={handleChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-[#2f3e46] focus:outline-none focus:ring-2 focus:ring-[#52796f] shadow-sm"
+              />
+              <input
+                name="street"
+                placeholder="Rue"
+                onChange={handleChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-[#2f3e46] focus:outline-none focus:ring-2 focus:ring-[#52796f] shadow-sm"
+              />
             </div>
+
+            <input
+              name="complement"
+              placeholder="Complément"
+              onChange={handleChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-[#2f3e46] focus:outline-none focus:ring-2 focus:ring-[#52796f] shadow-sm"
+            />
+
+            <div className="grid grid-cols-2 gap-3">
+              <input
+                name="city"
+                placeholder="Ville"
+                onChange={handleChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-[#2f3e46] focus:outline-none focus:ring-2 focus:ring-[#52796f] shadow-sm"
+              />
+              <input
+                name="postalCode"
+                placeholder="Code postal"
+                onChange={handleChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-[#2f3e46] focus:outline-none focus:ring-2 focus:ring-[#52796f] shadow-sm"
+              />
+            </div>
+
+           
+            <button
+              type="submit"
+              className="w-full bg-[#52796f] text-white py-3 rounded-lg hover:bg-[#354f52] transition"
+            >
+              Créer le compte
+            </button>
+
+            <button
+              type="button"
+              onClick={() => navigate("/")}
+              className="w-full border border-[#52796f] text-[#52796f] py-3 rounded-lg hover:bg-[#52796f] hover:text-white transition"
+            >
+              Retour à l’accueil
+            </button>
           </form>
         </div>
       </div>
     </div>
-)
+  );
+};
 
-}
-export default registrationForm
+export default RegistrationForm;
