@@ -84,8 +84,8 @@ export default function Header() {
                      Livraison
                   </Link>
 
-                  <Link to="/admin/analytics" className="block hover:text-green-600">
-                     Analytics
+                  <Link to="/admin/events" className="block hover:text-green-600">
+                     Events
                   </Link>
 
                 </div>
