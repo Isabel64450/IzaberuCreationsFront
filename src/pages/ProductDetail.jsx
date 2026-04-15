@@ -6,10 +6,12 @@ import '../styles/productDetail.css'
 function ProductDetail() {
   const { productId } = useParams(); 
   const [product, setProduct] = useState(null);
+  const [products, setProducts] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [isZoomed, setIsZoomed] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-const { fetchItemCount } = useContext(CartContext);
+  const { fetchItemCount } = useContext(CartContext);
 
 
   const getOrCreateCartId = (customerId) => {
@@ -24,14 +26,19 @@ const { fetchItemCount } = useContext(CartContext);
       return guestCartId;
     }
   };
-useEffect(() => {
+  useEffect(() => {
   async function fetchProduct() {
     try {
-      const response = await axiosInstance.get(`/products/${productId}`);
-      
-      setProduct(response.data);
-      if (response.data.images && response.data.images.length > 0) {
-          setSelectedImage(response.data.images[0]);
+
+       const [productRes, listRes] = await Promise.all([
+        axiosInstance.get(`/products/${productId}`),
+        axiosInstance.get(`/products`)
+      ]);
+     
+      setProduct(productRes.data);
+      setProducts(listRes.data.data);
+      if (productRes.data.images?.length > 0) {
+          setSelectedImage(productRes.data.images[0]);
         }
       setLoading(false);
     } catch (err) {
@@ -40,6 +47,7 @@ useEffect(() => {
       setLoading(false);
     }
   }
+ 
   fetchProduct();
 }, [productId]);
 const handleAddToCart= async(product)=> {
@@ -64,13 +72,44 @@ const handleAddToCart= async(product)=> {
     alert("Erreur : impossible d’ajouter au panier.");
   }
 }
-  
+const currentIndex = Array.isArray(products)
+  ? products.findIndex(
+      (p) => p.product_id === Number(productId)
+    )
+  : -1;
+
+const prevProduct =
+  currentIndex > 0 ? products[currentIndex - 1] : null;
+
+const nextProduct =
+  currentIndex >= 0 && currentIndex < products.length - 1
+    ? products[currentIndex + 1]
+    : null;
+
 if (loading) return <p>Chargement du produit...</p>;
 if (error) return <p>{error}</p>;
 if (!product) return <p>Produit introuvable.</p>;
 
   return (
   <div className="min-h-screen bg-[#cad2c5] px-6 py-24 text-[#2f3e46]">
+    <div className="relative max-w-6xl mx-auto">
+  
+  {prevProduct && (
+    <Link
+      to={`/products/${prevProduct.product_id}`}
+      className="absolute -left-20 top-1/2 -translate-y-1/2 text-[#2f3e46] text-6xl cursor-pointer hover:scale-125 hover:text-[#52796f] transition duration-300 z-30">
+      <span>‹</span>
+    </Link>
+  )}
+
+ 
+  {nextProduct && (
+    <Link
+      to={`/products/${nextProduct.product_id}`}
+      className="absolute -right-20 top-1/2 -translate-y-1/2 text-[#2f3e46] text-6xl cursor-pointer hover:scale-125 hover:text-[#52796f] transition duration-300 z-30" >
+      <span>›</span>
+    </Link>
+  )}
 
     <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12">
 
@@ -81,7 +120,7 @@ if (!product) return <p>Produit introuvable.</p>;
         <div className="rounded-2xl overflow-hidden bg-[#cad2c5] shadow-lg flex items-center justify-center h-[500px] relative">
 
              {selectedImage ? ( <>     
-             <img src={selectedImage} alt="Produit" className="max-h-full max-w-full object-contain relative z-10"/>
+             <img src={selectedImage} alt="Produit" onClick={()=> setIsZoomed(true)} className="max-h-full max-w-full object-contain relative z-10 cursor-zoom-in"/>
                </>
                  ) : (
                <div className="text-[#2f3e46]"> Aucune image</div>
@@ -137,12 +176,12 @@ if (!product) return <p>Produit introuvable.</p>;
           </p>
 
   
-  <p className="flex justify-between">
-    <span className="font-semibold">Poids :</span>
-    <span>{product.product_weight_g} g</span>
-  </p>
+          <p className="flex justify-between">
+             <span className="font-semibold">Poids :</span>
+             <span>{product.product_weight_g} g</span>
+          </p>
 
-</div>
+       </div>
 
         
         <div className="text-2xl font-bold text-[#2f3e46]">
@@ -177,7 +216,18 @@ if (!product) return <p>Produit introuvable.</p>;
       </div>
 
     </div>
+      {isZoomed && (
+      <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"  onClick={() => setIsZoomed(false)} >
+           <img src={selectedImage}  alt="Zoom" className="max-w-[90%] max-h-[90%] object-contain cursor-zoom-out"/>
+      </div>
+)}
+
+
+
   </div>
+   </div>
+  
+    
 );
    
 }

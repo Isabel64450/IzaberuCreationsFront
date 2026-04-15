@@ -23,7 +23,7 @@ const { isAuthenticated, loading: authLoading} = useAuth();
 
      if (isAuthenticated) {
   try {
-    const res = await axiosInstance.get('/users/me');
+    const res = await axiosInstance.get('/auth/me');
     user = res.data;
   } catch (err) {
     console.error(err);

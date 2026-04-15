@@ -31,8 +31,8 @@ const RegistrationForm = () => {
     }
 
     try {
-      await axiosInstance.post("/users/register", form);
-      alert("Compte créé !");
+      await axiosInstance.post("/auth/register", form);
+      alert("Compte créé verifier votre boit email pour activer votre compte !");
       navigate("/login");
     } catch (err) {
       console.error(err);

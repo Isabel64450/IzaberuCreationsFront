@@ -20,7 +20,7 @@ export default function ResetPassword() {
 
     try {
       const res = await axiosInstance.post(
-        `/users/reset-password/${token}`,
+        `/auth/reset-password/${token}`,
         { password, confirmPassword }
       );
 

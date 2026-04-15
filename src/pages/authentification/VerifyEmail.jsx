@@ -13,17 +13,22 @@ const VerifyEmailPage = () => {
     const verify = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_PORT_BACK}/users/verify/${token}`
+          `${import.meta.env.VITE_PORT_BACK}/auth/verify/${token}`
         );
-
+       
         setMessage(
           res.data.message || "Votre compte a été vérifié avec succès."
         );
-        setSuccess(true);
+       if (res.status === 200) {
+         setSuccess(true);
+} else {
+  setSuccess(false);
+}
 
         setTimeout(() => navigate("/login"), 3000);
       } catch (err) {
         console.error(err);
+   
 
         setMessage(
           err.response?.data?.message || "Lien invalide ou expiré."

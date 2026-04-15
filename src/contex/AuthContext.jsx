@@ -10,7 +10,7 @@ export function AuthProvider({ children }) {
 
 const logout = async () => {
   try {
-    await axiosInstance.get("/users/logout");
+    await axiosInstance.get("/auth/logout");
   } catch (err) {
     console.error(err);
   }
@@ -22,7 +22,7 @@ const logout = async () => {
 
  const fetchUser = async () => {
   try {
-    const res = await axiosInstance.get("/users/me");
+    const res = await axiosInstance.get("/auth/me");
     setUser(res.data);
     setIsAuthenticated(true);
   } catch {

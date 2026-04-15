@@ -21,6 +21,9 @@ import Artist from './pages/Artist.jsx'
 import AdminEvents from "./pages/adminPages/events/AdminEvents";
 import AdminNewEvent from "./pages/adminPages/events/AdminNewEvent";
 import AdminEditEvent from "./pages/adminPages/events/AdminEditEvent";
+import UsersList from './pages/adminPages/users/UsersList.jsx'
+import EditUser from './pages/adminPages/users/EditUser.jsx'
+import VerifyEmailPage from './pages/authentification/VerifyEmail.jsx'
 
 const EmptyLayout =() => <Outlet />
 
@@ -31,6 +34,7 @@ const router = createBrowserRouter([
     {path:"login", element: <LoginForm/>},
     {path: '/forgot-password',element: <ForgotPassword/>},
     { path: '/reset-password/:token', element: <ResetPassword/> },
+    { path: '/verify-email/:token', element: <VerifyEmailPage/> },
     {path: '/gallery',element: <Gallery/>},
     {path: '/artist', element: <Artist/>},
     {path:'/products/:productId',element:<ProductDetail/>},
@@ -47,6 +51,8 @@ const router = createBrowserRouter([
     { path: "/admin/events", element: <AdminEvents /> },
 { path: "/admin/events/new", element: <AdminNewEvent /> },
 { path: "/admin/events/:id", element: <AdminEditEvent /> },
+{ path: "/admin/users", element: <UsersList /> },
+{ path: "/admin/users/edit/:id", element: <EditUser /> }
     
    
 ]

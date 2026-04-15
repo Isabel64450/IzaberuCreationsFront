@@ -13,7 +13,7 @@ const LoginForm = () => {
     e.preventDefault();
 
     try {
-      const res = await axiosInstance.post("/users/login", {
+      const res = await axiosInstance.post("/auth/login", {
         email,
         password,
       });
@@ -34,13 +34,10 @@ const LoginForm = () => {
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8"
-      >
-        {/* Title */}
+      >    
         <h1 className="text-3xl font-bold text-center text-[#2f3e46] mb-6">
           Connexion
-        </h1>
-
-        {/* Email */}
+        </h1>    
         <input
           type="email"
           value={email}
