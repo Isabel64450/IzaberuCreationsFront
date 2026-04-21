@@ -31,7 +31,7 @@ const updateQuantity = async (itemId, newQty) => {
             item.cart_item_id === itemId ? { ...item, quantity: newQty } : item
           )
         );
-
+     
         
       } fetchItemCount();
   } catch (error) {
@@ -41,23 +41,22 @@ const updateQuantity = async (itemId, newQty) => {
 };
 
 
-
-
-
-
   useEffect(() => {
+    console.log("cartItems updated:", cartItems);
     async function fetchCartItems() {
       setLoading(true);
       setError(null);
       try {
         const cartId = getCartId();
         if (!cartId) {
+
           setCartItems([]);
           setLoading(false);
           fetchItemCount();
           return;
         }
         const response = await axiosInstance.get(`/cart/${cartId}`);
+        console.log("API response:", response.data);
         setCartItems(response.data);
         fetchItemCount();
       } catch (err) {

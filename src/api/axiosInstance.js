@@ -4,10 +4,9 @@ const axiosInstance =axios.create({
     withCredentials: true,
 })
 
-axiosInstance.interceptors.response.use((res)=> res,
-(err)=>{
-    if(err.response?.status === 401){console.log("Unauthorized → user not valid");}
-    return Promise.reject(err)
-})
+axiosInstance.interceptors.response.use((config)=> {
+    return config
+}
+)
 
 export default axiosInstance
