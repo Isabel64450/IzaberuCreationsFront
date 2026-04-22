@@ -24,6 +24,8 @@ import AdminEditEvent from "./pages/adminPages/events/AdminEditEvent";
 import UsersList from './pages/adminPages/users/UsersList.jsx'
 import EditUser from './pages/adminPages/users/EditUser.jsx'
 import VerifyEmailPage from './pages/authentification/VerifyEmail.jsx'
+import Success from "./pages/Succes.jsx";
+import Cancel from "./pages/Cancel.jsx"; 
 
 const EmptyLayout =() => <Outlet />
 
@@ -38,8 +40,10 @@ const router = createBrowserRouter([
     {path: '/gallery',element: <Gallery/>},
     {path: '/artist', element: <Artist/>},
     {path:'/products/:productId',element:<ProductDetail/>},
-     { path: '/cart', element: <Cart /> },
-     {path: '/checkout', element:<Checkout/>}    
+    { path: '/cart', element: <Cart /> },
+    {path: '/checkout', element:<Checkout/>},
+    { path: '/success', element: <Success /> },
+    { path: '/cancel', element: <Cancel /> }, 
     
   ]
 },{

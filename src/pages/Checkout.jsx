@@ -7,32 +7,27 @@ import { useAuth } from "../contex/AuthContext";
 
 
 function Checkout() {
-  const {clearCart, fetchitemCount} = useContext(CartContext)
-  const { isAuthenticated, user, loading: authLoading} = useAuth();
+  const {fetchItemCount} = useContext(CartContext)
+  
   const [cartItems, setCartItems]=useState([])
-
+  
   const [pageLoading, setPageLoading] = useState(true);
   const [payLoading, setPayLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [form, setForm]=useState({
-    name:"",
-    email:"",
-    address:"",
-    city:"",
-    postal_code:"",
-    country:"FR"
-  })
   
-
-  
-
+   
   useEffect(() => {
     const fetchCart = async () =>{
       try{
         const cartId = localStorage.getItem("cart_id")
-        if(!cartId) return 
+        if(!cartId){
+            setCartItems([]);
+            return;
+        }
+          
         const res = await axiosInstance.get(`/cart/${cartId}`)
         setCartItems(res.data)
+        fetchItemCount();
       } catch(err){
         console.error(err)
         setError("Erreur récupération panier")
@@ -42,145 +37,87 @@ function Checkout() {
     }
       fetchCart();
       }, []);
-     useEffect(() => {
-    if (authLoading) return;
+    
 
-    if (isAuthenticated && user) {
-      setForm((prev) => ({
-        ...prev,
-        name: user.name || "",
-        email: user.email || "",
-        address: user.address || "",
-        city: user.city || "",
-        postal_code: user.postal_code || "",
-      }));
-    }
-  }, [isAuthenticated, user, authLoading]);
-
- 
-  const handlePay = async () => {
+    const handlePay = async () => {
     try {
       setPayLoading(true);
        setError(null);
-      const cartId = localStorage.getItem("cart_id");
+
+    
+    const cartId = localStorage.getItem("cart_id");
 
       if (!cartId || cartItems.length === 0) {
         setError("Panier vide");
+        setPayLoading(false);
         return;
       }
-
       
-      const res = await axiosInstance.post(
+    const res = await axiosInstance.post(
         "/payments/create-checkout-session",
         {
           index_id: cartId,
           cartItems,
-          shipping: form,
+        
         }
-      );
+      );    
       
-      console.log("Stripe URL:", res.data.url);
-
      if (!res.data?.url) {
       setError("Lien Stripe manquant");
       return;
     }
-
-
       
       window.location.href = res.data.url;
-      console.log(res.data);
+      
     } catch (err) {
       console.error(err);
       setError("Erreur lors du paiement");
     } finally {
       setPayLoading(false);
     }
-  };
-    if (pageLoading) {
+    };
+     if (pageLoading) {
+    return <div className="flex justify-center items-center h-screen">Chargement...</div>;
+  }
+
+  const total = cartItems.reduce((sum, item) => {
+    return sum + parseFloat(item.unit_price) * item.quantity;
+  }, 0);
     return (
-      <div className="flex justify-center items-center h-screen">
-        Chargement...
-      </div>
-    );
-    }
-  
-  return (
       <div className="min-h-screen bg-gray-100 flex justify-center items-center p-4">
       
       <div className="bg-white shadow-lg rounded-2xl p-6 w-full max-w-lg">
         
         <h2 className="text-2xl font-bold mb-6 text-center">
-          Checkout
+           Récapitulatif de votre commande
         </h2>
 
         {error && (
           <p className="text-red-500 text-center mb-4">{error}</p>
         )}
-
        
         <div className="space-y-4">
-          
-          <input
-            type="text"
-            placeholder="Nom"
-            className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-black"
-            value={form.name}
-            onChange={(e) =>
-              setForm({ ...form, name: e.target.value })
-            }
-          />
-
-          <input
-            type="email"
-            placeholder="Email"
-            className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-black"
-            value={form.email}
-            onChange={(e) =>
-              setForm({ ...form, email: e.target.value })
-            }
-          />
-
-          <input
-            type="text"
-            placeholder="Adresse"
-            className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-black"
-            value={form.address}
-            onChange={(e) =>
-              setForm({ ...form, address: e.target.value })
-            }
-          />
-
-          <input
-            type="text"
-            placeholder="Ville"
-            className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-black"
-            value={form.city}
-            onChange={(e) =>
-              setForm({ ...form, city: e.target.value })
-            }
-          />
-
-          <input
-            type="text"
-            placeholder="Code postal"
-            className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-black"
-            value={form.postal_code}
-            onChange={(e) =>
-              setForm({ ...form, postal_code: e.target.value })
-            }
-          />
-
+          {cartItems.map(item => (
+            <div key={item.cart_item_id} className="flex justify-between">
+              <span>{item.product_name} x{item.quantity}</span>
+              <span>{(item.unit_price * item.quantity).toFixed(2)} €</span>
+            </div>
+          ))}
         </div>
 
-       
+        <div className="mt-6 text-right font-bold text-lg">
+          Total : {total.toFixed(2)} €
+        </div>
+
         <button
           onClick={handlePay}
           disabled={payLoading}
-          className="w-full mt-6 bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition disabled:opacity-50"
+          className="w-full mt-6 bg-black text-white py-3 rounded-lg"
         >
-          {payLoading ? "Redirection..." : "Payer"}
+          {payLoading ? "Redirection..." : "Payer avec carte"}
         </button>
+          
+          
 
       </div>
     </div>
