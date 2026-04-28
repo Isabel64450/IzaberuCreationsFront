@@ -83,7 +83,7 @@ function Checkout() {
 
     try {        
     
-    const cartId = localStorage.getItem("cart_id");
+       const cartId = localStorage.getItem("cart_id");
 
       if (!cartId || cartItems.length === 0) {
         setError("Panier vide");
@@ -94,10 +94,25 @@ function Checkout() {
         setError("Veuillez remplir votre adresse");
         return;
       }
-    const res = await axiosInstance.post(
+      const orderRes=await axiosInstance.post("/orders/", {
+         cart_id: cartId,         
+         shipping,
+         shippingCost
+      });
+      
+     const orderId =
+             orderRes.data?.order?.index_id ||
+             orderRes.data?.order?.order_id;
+      if (!orderId) {
+          setError("Erreur création commande");
+      return;
+     }
+
+      
+      const res = await axiosInstance.post(
         "/payments/create-checkout-session",
         {
-          index_id: cartId,
+          order_id: orderId,
           cartItems,
           shipping,
           shippingCost,
@@ -137,7 +152,7 @@ const total = subtotal + (shippingCost || 0);
       
       <div className="bg-white shadow-lg rounded-2xl p-6 w-full max-w-lg">
           <h2 className="text-2xl font-bold mb-6 text-center">
-          Checkout pour caluler le frais de livraisson
+          Checkout pour calculer les frais de livraison
         </h2>
 
        
