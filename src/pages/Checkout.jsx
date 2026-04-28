@@ -15,8 +15,7 @@ function Checkout() {
   const [payLoading, setPayLoading] = useState(false);
   const [error, setError] = useState(null);
   const [shipping, setShipping] = useState({
-  name: "",
-  
+  name: "",  
   line1: "",
   line2:"",
   city: "",
@@ -42,29 +41,24 @@ function Checkout() {
         setError("Erreur récupération panier")
       }  finally {
       setPageLoading(false); 
+      }
     }
-    }
-      fetchCart();
-      }, []);
+        fetchCart();
+        }, []);
     
 
-     useEffect(() => {
-      
-  const fetchShippingCost = async () => {
-   
-    if (!shipping.postal_code && !shipping.city) return;
-
-    try {
-      const res = await axiosInstance.get("/shipping/cost", {
-        params: {
+  useEffect(() => {      
+    const fetchShippingCost = async () => {   
+       if (!shipping.postal_code && !shipping.city) return;
+          try {
+    const res = await axiosInstance.get("/shipping/cost", {
+          params: {
           city: shipping.city,
           postal_code: shipping.postal_code,
         },
       });
-      const cost = Number(res.data.cost)
-
-      setShippingCost(cost);
-      
+    const cost = Number(res.data.cost)
+          setShippingCost(cost);      
     } catch (err) {
       console.error(err);
       setShippingCost(8.9); 
@@ -75,56 +69,47 @@ function Checkout() {
 }, [shipping.city, shipping.postal_code]);
 
     const handlePay = async (e) => {
-      e.preventDefault();
-      
+      e.preventDefault();      
        if (payLoading) return;
        setPayLoading(true);
        setError(null);
-
-    try {        
+       try {   
     
-       const cartId = localStorage.getItem("cart_id");
-
+    const cartId = localStorage.getItem("cart_id");
       if (!cartId || cartItems.length === 0) {
-        setError("Panier vide");
-     
+        setError("Panier vide");     
         return;
       }
       if (!shipping.name  || !shipping.line1) {
         setError("Veuillez remplir votre adresse");
         return;
       }
-      const orderRes=await axiosInstance.post("/orders/", {
+    const orderRes=await axiosInstance.post("/orders/", {
          cart_id: cartId,         
          shipping,
          shippingCost
       });
       
-     const orderId =
-             orderRes.data?.order?.index_id ||
-             orderRes.data?.order?.order_id;
+    const orderId =
+                    orderRes.data?.order?.index_id ||
+                    orderRes.data?.order?.order_id;
       if (!orderId) {
           setError("Erreur création commande");
       return;
      }
-
-      
-      const res = await axiosInstance.post(
-        "/payments/create-checkout-session",
+    const res = await axiosInstance.post("/payments/create-checkout-session",
         {
           order_id: orderId,
           cartItems,
           shipping,
-          shippingCost,
-        
+          shippingCost,        
         }
       );    
       
      if (!res.data?.url) {
       setError("Lien Stripe manquant");
       return;
-    }
-      
+    }      
       window.location.href = res.data.url;
       
     } catch (err) {
@@ -139,14 +124,11 @@ function Checkout() {
   }
 
 
-const subtotal = cartItems.reduce((sum, item) => {
+  const subtotal = cartItems.reduce((sum, item) => {
   return sum + Number(item.unit_price) * item.quantity;
 }, 0);
 
-const total = subtotal + (shippingCost || 0);
-
-
-
+  const total = subtotal + (shippingCost || 0);
     return (
       <div className="min-h-screen bg-gray-100 flex justify-center items-center p-4">
       
@@ -217,20 +199,17 @@ const total = subtotal + (shippingCost || 0);
           </div>
 
            <div className="mt-4 text-right space-y-1">
-  <div>Sous-total : {subtotal.toFixed(2)} €</div>
-
-  <div>
-    Livraison :{" "}
-    {shippingCost === null
-      ? "Calcul..."
-      : `${shippingCost.toFixed(2)} €`}
-  </div>
-
-
-          <div className="mt-4 text-right font-bold text-lg">
-            Total : {total.toFixed(2)} €
-          </div>
-   </div>
+              <div>Sous-total : {subtotal.toFixed(2)} €</div>
+                <div>
+                    Livraison :{" "}
+                    {shippingCost === null
+                    ? "Calcul..."
+                    : `${shippingCost.toFixed(2)} €`}
+                </div>
+                <div className="mt-4 text-right font-bold text-lg">
+                Total : {total.toFixed(2)} €
+                </div>
+              </div>
           
           <button
             type="submit"
@@ -240,7 +219,7 @@ const total = subtotal + (shippingCost || 0);
             {payLoading ? "Redirection..." : "Payer avec carte"}
           </button>
 
-</form>
+      </form>
           
 
       </div>
