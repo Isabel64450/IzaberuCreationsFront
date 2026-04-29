@@ -16,6 +16,7 @@ import Cart from './pages/Cart.jsx'
 import { CartProvider } from './contex/CartContex'
 import Checkout from './pages/Checkout.jsx'
 import AdminProducts from './pages/adminPages/products/AdminProducts.jsx'
+import AdminOrders from './pages/adminPages/orders/AdminOrders.jsx'
 import AdminEditProduct from './pages/adminPages/products/AdminEditProduct.jsx'
 import Artist from './pages/Artist.jsx'
 import AdminEvents from "./pages/adminPages/events/AdminEvents";
@@ -56,7 +57,8 @@ const router = createBrowserRouter([
 { path: "/admin/events/new", element: <AdminNewEvent /> },
 { path: "/admin/events/:id", element: <AdminEditEvent /> },
 { path: "/admin/users", element: <UsersList /> },
-{ path: "/admin/users/edit/:id", element: <EditUser /> }
+{ path: "/admin/users/edit/:id", element: <EditUser /> },
+{path: "/admin/orders/", element: <AdminOrders />}
     
    
 ]

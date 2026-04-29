@@ -11,7 +11,7 @@ function AdminEvents() {
 
   async function fetchEvents() {
     const res = await axiosInstance.get("/events");
-   console.log("EVENTS RAW:", res.data);
+ 
     setEvents([...res.data.upcoming, ...res.data.past]);
   }
 
