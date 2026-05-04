@@ -206,7 +206,7 @@ if (!product) return <p>Produit introuvable.</p>;
           </Link>
 
           <Link
-            to="/gallery"
+            to="/products"
             className="text-center text-[#52796f] hover:underline"
           >
             ← Retour à la galerie

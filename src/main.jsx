@@ -9,7 +9,7 @@ import LoginForm from "./pages/authentification/Login.jsx"
 import ForgotPassword from './pages/authentification/ForgotPassword.jsx'
 import ResetPassword from './pages/authentification/ResetPassword.jsx'
 import CreateProduct from './pages/adminPages/products/CreatedProduct.jsx'
-import Gallery from './pages/Gallery.jsx'
+import Gallery from './pages/Products.jsx'
 import { AuthProvider } from '../src/contex/AuthContext.jsx'
 import ProductDetail from './pages/ProductDetail.jsx'
 import Cart from './pages/Cart.jsx'
@@ -38,7 +38,7 @@ const router = createBrowserRouter([
     {path: '/forgot-password',element: <ForgotPassword/>},
     { path: '/reset-password/:token', element: <ResetPassword/> },
     { path: '/verify-email/:token', element: <VerifyEmailPage/> },
-    {path: '/gallery',element: <Gallery/>},
+    {path: '/products',element: <Gallery/>},
     {path: '/artist', element: <Artist/>},
     {path:'/products/:productId',element:<ProductDetail/>},
     { path: '/cart', element: <Cart /> },
