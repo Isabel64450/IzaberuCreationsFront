@@ -52,14 +52,14 @@ function Gallery() {
   return (
     <div className="min-h-screen bg-[#cad2c5] px-6 py-24 text-[#2f3e46]">    
 
-        <div className="w-full flex flex-col items-center text-center mb-12">
+        <div className="w-full flex flex-col items-center text-center mb-8">
         <h2 className="text-4xl font-bold">Creations</h2>
         <p className="text-[#2f3e46] mt-2">
           Découvrez les créations disponibles
         </p>
         </div>
           {category === "aquarelle" && (
-           <div className="flex justify-center gap-3 mb-10 flex-wrap">
+           <div className="flex justify-center gap-3 mb-8 flex-wrap">
           {["", "A5", "A4", "A3"].map((f) => (
              <button key={f} onClick={() => {setPage(1);
             
@@ -95,6 +95,7 @@ function Gallery() {
             <Link
               key={id}
               to={`/products/${id}`}
+              state={{category, format}}
               className="group bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:scale-[1.03] transition duration-300"
             >
               <div className="overflow-hidden">
