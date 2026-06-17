@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import axiosInstance from "../../../api/axiosInstance";
 
 function AdminOrders() {
@@ -21,6 +22,25 @@ function AdminOrders() {
     fetchOrders();
   }, []);
 
+   const handleStatusChange = async (id, newStatus) => {
+  try {
+    await axiosInstance.patch(`/orders/${id}`, {
+      order_status: newStatus,
+    });
+
+    setOrders((prev) =>
+      prev.map((order) =>
+        order.index_id === id
+          ? { ...order, order_status: newStatus }
+          : order
+      )
+    );
+  } catch (err) {
+    console.error("Erreur update status:", err);
+  }
+};
+
+
   if (loading) {
     return <div className="p-4">Chargement...</div>;
   }
@@ -36,8 +56,8 @@ function AdminOrders() {
             <tr>
               <th className="p-2 border">ID</th>
               <th className="p-2 border">Email</th>
-              <th className="p-2 border">Statut</th>
-              <th className="p-2 border">Paiement</th>
+              <th className="p-2 border">Statut Command</th>
+              <th className="p-2 border">Paiement Stripe</th>
               <th className="p-2 border">Montant</th>
               <th className="p-2 border">Ville</th>
               <th className="p-2 border">Tracking</th>
@@ -51,11 +71,16 @@ function AdminOrders() {
                 <td className="p-2 border">{order.email}</td>
 
                 <td className="p-2 border">
-                  <span className={`px-2 py-1 rounded text-white ${
-                    order.order_status === "paid" ? "bg-green-500" : "bg-orange-500"
-                  }`}>
-                    {order.order_status}
-                  </span>
+                   <select value={order.order_status}
+                           onChange={(e) => handleStatusChange(order.index_id, e.target.value)}
+                           className="border rounded px-2 py-1"
+                    >
+                          <option value="pending">Pending</option>
+                          <option value="approved">Approved</option>
+                          <option value="shipped">Shipped</option>
+                          <option value="delivered">Delivered</option>
+                          <option value="cancelled">Cancelled</option>
+                   </select>
                 </td>
 
                 <td className="p-2 border">{order.payment_status}</td>
@@ -77,6 +102,14 @@ function AdminOrders() {
 
         </table>
       </div>
+      <div className="mb-4">
+      <Link
+         to="/admin"
+         className="text-blue-600 hover:underline"
+       >
+              ← Retour au dashboard admin
+      </Link>
+</div>
     </div>
   );
 }

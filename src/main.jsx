@@ -22,6 +22,7 @@ import Artist from './pages/Artist.jsx'
 import AdminEvents from "./pages/adminPages/events/AdminEvents";
 import AdminNewEvent from "./pages/adminPages/events/AdminNewEvent";
 import AdminEditEvent from "./pages/adminPages/events/AdminEditEvent";
+import AdminDashboard from './pages/adminPages/Admindashboard.jsx'
 import UsersList from './pages/adminPages/users/UsersList.jsx'
 import EditUser from './pages/adminPages/users/EditUser.jsx'
 import VerifyEmailPage from './pages/authentification/VerifyEmail.jsx'
@@ -34,15 +35,15 @@ const router = createBrowserRouter([
 {path:'/',element: <App/>,
   children:[
     {index: true, element: <Home/>},
-    {path:"login", element: <LoginForm/>},
-    {path: '/forgot-password',element: <ForgotPassword/>},
+    { path:"login", element: <LoginForm/>},
+    { path: '/forgot-password',element: <ForgotPassword/>},
     { path: '/reset-password/:token', element: <ResetPassword/> },
     { path: '/verify-email/:token', element: <VerifyEmailPage/> },
-    {path: '/products',element: <Gallery/>},
-    {path: '/artist', element: <Artist/>},
-    {path:'/products/:productId',element:<ProductDetail/>},
+    { path: '/products',element: <Gallery/>},
+    { path: '/artist', element: <Artist/>},
+    { path:'/products/:productId',element:<ProductDetail/>},
     { path: '/cart', element: <Cart /> },
-    {path: '/checkout', element:<Checkout/>},
+    { path: '/checkout', element:<Checkout/>},
     { path: '/success', element: <Success /> },
     { path: '/cancel', element: <Cancel /> }, 
     
@@ -51,14 +52,15 @@ const router = createBrowserRouter([
   element: <EmptyLayout/>,
   children:[{path:'/register', element:<RegistrationForm/>},
     { path: '/admin/products/new', element: <CreateProduct /> },
-    {path: '/admin/products', element: <AdminProducts />},
-    {path: '/admin/products/:id', element: <AdminEditProduct/>},
+    { path: '/admin/products', element: <AdminProducts />},
+    { path: '/admin/products/:id', element: <AdminEditProduct/>},
     { path: "/admin/events", element: <AdminEvents /> },
-{ path: "/admin/events/new", element: <AdminNewEvent /> },
-{ path: "/admin/events/:id", element: <AdminEditEvent /> },
-{ path: "/admin/users", element: <UsersList /> },
-{ path: "/admin/users/edit/:id", element: <EditUser /> },
-{path: "/admin/orders/", element: <AdminOrders />}
+    { path: "/admin/events/new", element: <AdminNewEvent /> },
+    { path: "/admin/events/:id", element: <AdminEditEvent /> },
+    { path: "/admin/users", element: <UsersList /> },
+    { path: "/admin/users/edit/:id", element: <EditUser /> },
+    { path: "/admin/orders/", element: <AdminOrders />},
+    { path:"/admin", element: <AdminDashboard />} 
     
    
 ]

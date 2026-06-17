@@ -12,6 +12,7 @@ function Artist() {
     async function fetchEvents() {
       try {
         const res = await axiosInstance.get("/events");
+       
         setEvents(res.data);
       } catch (error) {
         console.error("Erreur events:", error);

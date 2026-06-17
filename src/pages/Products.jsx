@@ -21,7 +21,9 @@ function Gallery() {
       try {
         setLoading(true);
         const response = await axiosInstance.get( `/products?page=${page}&limit=${limit}&category=${category || ""}&format=${format || ""}`);
+        
         setProducts(response.data.data);
+    
         const total = response.data.total
         setTotalPages(Math.ceil(total/limit));
       } catch (err) {

@@ -63,6 +63,10 @@ export default function Header() {
 
               {adminOpen && (
                 <div className="absolute right-0 top-8 bg-white text-black shadow-lg rounded-lg w-52 p-3 space-y-2 z-50">
+                   <Link to="/admin" className="block hover:text-green-600 font-semibold">
+                      Dashboard
+                   </Link>
+
 
                   <Link to="admin/products" className="block hover:text-green-600">
                      Produits
