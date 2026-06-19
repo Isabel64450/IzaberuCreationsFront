@@ -5,26 +5,33 @@ import axiosInstance from '../api/axiosInstance';
 import '../styles/productDetail.css'
 function ProductDetail() {
   const { productId } = useParams(); 
+  const location = useLocation();
+  
   const [product, setProduct] = useState(null);
   const [products, setProducts] = useState([]);
+
   const [selectedImage, setSelectedImage] = useState(null);
   const [isZoomed, setIsZoomed] = useState(false);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
   const { fetchItemCount } = useContext(CartContext);
-  const location = useLocation();
-  const category = location.state?.category;
-  const format = location.state?.format;
+  
+  const params = new URLSearchParams(location.search);
 
+const category = params.get("category");
+const format = params.get("format");
+  
 const normalize = (str) =>
   str?.trim().toLowerCase();
 
 const filteredProducts = category
-  ? products.filter(
+  ?  (products || []).filter(
       (p) =>
         normalize(p.category) === normalize(category)
     )
-  : products;
+  :  (products || []);
 
 
 
@@ -44,13 +51,17 @@ const filteredProducts = category
   async function fetchProduct() {
     try {
 
-       const [productRes, listRes] = await Promise.all([
+       const [productsRes, productRes] = await Promise.all([
+        axiosInstance.get("/products",{params:{category,
+          format, all:true}}),
         axiosInstance.get(`/products/${productId}`),
-        axiosInstance.get(`/products`)
+        
+        
       ]);
-     
+      const list = productsRes.data.data;
+      setProducts(list);
       setProduct(productRes.data);
-      setProducts(listRes.data.data);
+     
       if (productRes.data.images?.length > 0) {
           setSelectedImage(productRes.data.images[0]);
         }
@@ -86,23 +97,23 @@ const handleAddToCart= async(product)=> {
     alert("Erreur : impossible d’ajouter au panier.");
   }
 }
-const currentIndex = Array.isArray(filteredProducts)
-  ? filteredProducts.findIndex(
-      (p) => p.product_id === Number(productId)
-    )
-  : -1;
+const currentIndex = products.findIndex(
+  (p) => String(p.product_id) === String(product?.product_id)
+);
 
 const prevProduct =
-  currentIndex > 0 ? filteredProducts[currentIndex - 1] : null;
+  currentIndex > 0 ? products[currentIndex - 1] : null;
 
 const nextProduct =
-  currentIndex >= 0 && currentIndex < filteredProducts.length - 1
-    ? filteredProducts[currentIndex + 1]
+  currentIndex >= 0 && currentIndex < products.length - 1
+    ? products[currentIndex + 1]
     : null;
 
 if (loading) return <p>Chargement du produit...</p>;
 if (error) return <p>{error}</p>;
 if (!product) return <p>Produit introuvable.</p>;
+
+
 
   return (
   <div className="min-h-screen bg-[#cad2c5] px-6 py-24 text-[#2f3e46]">
