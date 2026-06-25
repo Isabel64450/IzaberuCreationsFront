@@ -15,8 +15,12 @@ function ProductDetail() {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  
+
   
   const { fetchItemCount } = useContext(CartContext);
+  const [cartItems, setCartItems] = useState([]);
   
   const params = new URLSearchParams(location.search);
 
@@ -33,7 +37,18 @@ const filteredProducts = category
     )
   :  (products || []);
 
+const stock = Number(product?.quantity ?? 0);
 
+const qtyInCart =
+  cartItems.find(
+    item => Number(item.product_id) === Number(product?.product_id)
+  )?.quantity || 0;
+
+const availableStock = stock - Number(qtyInCart);
+
+const disponible =
+  product?.disponibility === 1 &&
+  availableStock > 0;
 
   const getOrCreateCartId = (customerId) => {
     if (customerId) {
@@ -50,31 +65,42 @@ const filteredProducts = category
   useEffect(() => {
   async function fetchProduct() {
     try {
+      setLoading(true);
 
-       const [productsRes, productRes] = await Promise.all([
-        axiosInstance.get("/products",{params:{category,
-          format, all:true}}),
+      const cartId = localStorage.getItem("cart_id");
+
+      const [productsRes, productRes, cartRes] = await Promise.all([
+        axiosInstance.get("/products", {
+          params: {
+            category,
+            format,
+            all: true
+          }
+        }),
         axiosInstance.get(`/products/${productId}`),
-        
-        
+        cartId
+          ? axiosInstance.get(`/cart/${cartId}`)
+          : Promise.resolve({ data: [] })
       ]);
-      const list = productsRes.data.data;
-      setProducts(list);
+          
+      setProducts(productsRes.data.data);
       setProduct(productRes.data);
-     
+      setCartItems(cartRes.data);
+
       if (productRes.data.images?.length > 0) {
-          setSelectedImage(productRes.data.images[0]);
-        }
-      setLoading(false);
+        setSelectedImage(productRes.data.images[0]);
+      }
+
     } catch (err) {
-        console.error("Erreur lors du chargement du produit :", err);
+      console.error("Erreur lors du chargement du produit :", err);
       setError("Impossible de charger le produit.");
+    } finally {
       setLoading(false);
     }
   }
- 
+
   fetchProduct();
-}, [productId]);
+}, [productId, category, format]);
 const handleAddToCart= async(product)=> {
    try {
     
@@ -90,11 +116,14 @@ const handleAddToCart= async(product)=> {
     };
 
      await axiosInstance.post('/cart', cartItem);
+     const cartRes = await axiosInstance.get(`/cart/${cartId}`);
+    setCartItems(cartRes.data);
      fetchItemCount();
     alert("Produit ajouté au panier !");
+    
   } catch (error) {
     console.error("Erreur lors de l’ajout au panier :", error);
-    alert("Erreur : impossible d’ajouter au panier.");
+    alert("Erreur : impossible d’ajouter au panier voir disponibilité.");
   }
 }
 const currentIndex = products.findIndex(
@@ -221,15 +250,39 @@ if (!product) return <p>Produit introuvable.</p>;
         <div className="text-2xl font-bold text-[#2f3e46]">
           {product.price} €
         </div>
+         
+         <div className="mt-2">
+            {disponible ? (
+  <span className="text-green-600">
+    En stock ({availableStock})
+  </span>
+) : (
+  <span className="text-red-600">
+    Rupture de stock
+  </span>
+)}
+         </div>
+
+
+
+
+
 
        
         <div className="flex flex-col gap-3">
 
           <button
             onClick={() => handleAddToCart(product)}
-            className="bg-[#52796f] text-white py-3 rounded-xl hover:bg-[#3d5f58] transition"
-          >
-            Ajouter au panier
+             disabled={!disponible}
+             className={`text-white py-3 rounded-xl transition ${
+             disponible
+              ? "bg-[#52796f] hover:bg-[#3d5f58]"
+              : "bg-gray-400 cursor-not-allowed"
+            }`}
+>
+           {disponible
+           ? "Ajouter au panier"
+           : "Produit indisponible"}
           </button>
 
           <Link
