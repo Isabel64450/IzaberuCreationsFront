@@ -26,13 +26,13 @@ export default function Home() {
         <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-center justify-center">
 
          
-          <Link to="/gallery" className="w-40 h-56 md:w-60 md:h-72 rounded-2xl border border-white/20 bg-white/10 backdrop-blur-xl flex flex-col justify-center items-center transition hover:-translate-y-2 hover:bg-[#84a98c]/30 cursor-pointer">
+          <Link to="/products?category=aquarelle" className="w-40 h-56 md:w-60 md:h-72 rounded-2xl border border-white/20 bg-white/10 backdrop-blur-xl flex flex-col justify-center items-center transition hover:-translate-y-2 hover:bg-[#84a98c]/30 cursor-pointer">
              <h2 className="text-xl font-semibold">Warcolors</h2>
                <p className="text-sm opacity-80">Watercolor art</p>
           </Link>
 
           
-          <Link to="/" className="w-40 h-56 md:w-60 md:h-72 rounded-2xl border border-white/20 bg-white/10 backdrop-blur-xl flex flex-col justify-center items-center transition hover:-translate-y-2 hover:bg-[#52796f]/30 cursor-pointer">
+          <Link to="/products?category=bijoux" className="w-40 h-56 md:w-60 md:h-72 rounded-2xl border border-white/20 bg-white/10 backdrop-blur-xl flex flex-col justify-center items-center transition hover:-translate-y-2 hover:bg-[#52796f]/30 cursor-pointer">
             <h2 className="text-xl font-semibold">Bijoux</h2>
             <p className="text-sm opacity-80">Handmade jewelry</p>
           </Link>

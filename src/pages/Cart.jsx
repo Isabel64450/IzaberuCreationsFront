@@ -18,6 +18,7 @@ function Cart() {
   };
 
 const updateQuantity = async (itemId, newQty) => {
+   console.log("Nouvelle quantité envoyée :", newQty);
   try {
     await axiosInstance.put(`/cart/${itemId}/quantity`, { quantity: newQty });
     if (newQty < 1) {
@@ -31,7 +32,7 @@ const updateQuantity = async (itemId, newQty) => {
             item.cart_item_id === itemId ? { ...item, quantity: newQty } : item
           )
         );
-
+     
         
       } fetchItemCount();
   } catch (error) {
@@ -41,23 +42,22 @@ const updateQuantity = async (itemId, newQty) => {
 };
 
 
-
-
-
-
   useEffect(() => {
+    console.log("cartItems updated:", cartItems);
     async function fetchCartItems() {
       setLoading(true);
       setError(null);
       try {
         const cartId = getCartId();
         if (!cartId) {
+
           setCartItems([]);
           setLoading(false);
           fetchItemCount();
           return;
         }
         const response = await axiosInstance.get(`/cart/${cartId}`);
+        console.log("API response:", response.data);
         setCartItems(response.data);
         fetchItemCount();
       } catch (err) {
@@ -82,9 +82,17 @@ const updateQuantity = async (itemId, newQty) => {
   if (loading) return <p>Chargement du panier...</p>;
   if (error) return <p>{error}</p>;
   const isEmpty = cartItems.length === 0;
+console.log("cartItems =", cartItems);
 
+cartItems.forEach(item => {
+  console.log(
+    "product =", item.product_name,
+    "quantity =", item.quantity,
+    "stock =", item.stock
+  );
+});
  return (
-  <div className="min-h-screen flex flex-col bg-[#cad2c5] px-6 py-24 text-[#2f3e46]">
+  <div className="min-h-screen flex flex-col bg-[#cad2c5] px-6 pt-32 pb-24 text-[#2f3e46]">
 
     <div className="flex-1 max-w-5xl mx-auto w-full">
 
@@ -107,6 +115,7 @@ const updateQuantity = async (itemId, newQty) => {
           <div className="space-y-6">
 
             {cartItems.map(item => (
+              
               <div
                 key={item.cart_item_id}
                 className="flex items-center gap-6 bg-white/60 backdrop-blur-md p-4 rounded-2xl shadow-sm"
@@ -150,6 +159,7 @@ const updateQuantity = async (itemId, newQty) => {
                     onClick={() => updateQuantity(item.cart_item_id, item.quantity + 1)}
                     className="px-2"
                     disabled={item.quantity >= item.stock}
+                    
                   >
                     +
                   </button>

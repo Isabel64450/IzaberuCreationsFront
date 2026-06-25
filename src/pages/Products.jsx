@@ -1,22 +1,29 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../api/axiosInstance";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate} from "react-router-dom";
 
 function Gallery() {
   const [products, setProducts] = useState([]);
-  const [format, setFormat] = useState("");
+ 
+  const location = useLocation();
   const [page, setPage] = useState(1);
-const [totalPages, setTotalPages] = useState(1);
-const limit = 8;
+  const [totalPages, setTotalPages] = useState(1);
+  const limit = 8;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
+  const params = new URLSearchParams(location.search);
+  const category = new URLSearchParams(location.search).get("category");
+  const format = new URLSearchParams(location.search).get("format");
 
   useEffect(() => {
     async function fetchProducts() {
       try {
         setLoading(true);
-        const response = await axiosInstance.get(`/products?page=${page}&limit=${limit}&format=${format}`);
+        const response = await axiosInstance.get( `/products?page=${page}&limit=${limit}&category=${category || ""}&format=${format || ""}`);
+        
         setProducts(response.data.data);
+    
         const total = response.data.total
         setTotalPages(Math.ceil(total/limit));
       } catch (err) {
@@ -27,7 +34,8 @@ const limit = 8;
     }
 
     fetchProducts();
-  }, [page, format]);
+  }, [page, format, category]);
+
 
   if (loading)
     return (
@@ -44,30 +52,41 @@ const limit = 8;
     );
 
   return (
-    <div className="min-h-screen bg-[#cad2c5] px-6 py-24 text-[#2f3e46]">
-      
+    <div className="min-h-screen bg-[#cad2c5] px-6 py-24 text-[#2f3e46]">    
 
-        <div className="w-full flex flex-col items-center text-center mb-12">
-        <h2 className="text-4xl font-bold">Galerie</h2>
+        <div className="w-full flex flex-col items-center text-center mb-8">
+        <h2 className="text-4xl font-bold">Creations</h2>
         <p className="text-[#2f3e46] mt-2">
           Découvrez les créations disponibles
         </p>
         </div>
+          {category === "aquarelle" && (
+           <div className="flex justify-center gap-3 mb-8 flex-wrap">
+          {["", "A5", "A4", "A3"].map((f) => (
+             <button key={f} onClick={() => {setPage(1);
+            
 
+        if (f) {
+                 params.set("format", f);
+                 } else {
+                 params.delete("format");
+                }
 
-        <div className="flex justify-center gap-3 mb-10 flex-wrap">
-  
-           {["", "A5", "A4", "A3"].map((f) => (
-            <button key={f} onClick={() => { setPage(1); setFormat(f); }}
-               className={`px-4 py-1 rounded-full border text-sm transition
-                ${format === f ? "bg-[#2f3e46] text-white" : "bg-white text-[#2f3e46] hover:bg-gray-100" }`} >
-           {f === "" ? "Tous" : f}
-            </button>
-             ))}
-
+           navigate(`/products?${params.toString()}`);
+        }}
+        
+        className={`px-4 py-1 rounded-full border text-sm transition
+          ${format === f
+            ? "bg-[#2f3e46] text-white"
+            : "bg-white text-[#2f3e46] hover:bg-gray-100"
+          }`}
+      >
+        {f === "" ? "Tous" : f}
+      </button>
+       ))}
         </div>
-
-     
+       )}
+    
       
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {products.map((product) => {
@@ -78,6 +97,7 @@ const limit = 8;
             <Link
               key={id}
               to={`/products/${id}`}
+              state={{category, format}}
               className="group bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:scale-[1.03] transition duration-300"
             >
               <div className="overflow-hidden">

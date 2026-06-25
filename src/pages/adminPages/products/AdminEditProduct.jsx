@@ -38,7 +38,7 @@ function EditProduct() {
         height: p.product_height_cm,
         width: p.product_width_cm,
         category: p.category,
-       
+       art_format: p.art_format || ""
       });
 
       setExistingImages(p.images || []);
@@ -49,8 +49,16 @@ function EditProduct() {
 
  
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const { name, value } = e.target;
+
+  setForm((prev) => ({
+    ...prev,
+    [name]: value,
+    ...(name === "category" && value !== "Aquarelle"
+      ? { art_format: "" }
+      : {})
+  }));
+};
 
   
   const handleFileChange = (e) => {
@@ -80,7 +88,13 @@ function EditProduct() {
 
     try {
     
-      await axiosInstance.put(`/products/${id}`, form);
+      await axiosInstance.put(`/products/${id}`, {
+      ...form,
+      art_format:
+      form.category === "Aquarelle"
+      ? form.art_format
+      : null
+      });
 
      
       if (newImages.length > 0) {
@@ -161,20 +175,35 @@ function EditProduct() {
     placeholder="Largeur"
     className="border p-2 rounded"
   />
-</div>
+   </div>
          
-<select
-  name="art_format"
-  value={form.art_format}
+  <select
+  name="category"
+  value={form.category}
   onChange={handleChange}
   className="w-full border p-2 rounded"
->
-  <option value="">Format</option>
-  <option value="A5">A5</option>
-  <option value="A4">A4</option>
-  <option value="A3">A3</option>
-  <option value="A2">A2</option>
-</select>
+  >
+  <option value="">Choisir une catégorie</option>
+  <option value="Bijoux">Bijoux</option>
+  <option value="Aquarelle">Aquarelle</option>
+  </select>
+
+
+
+{form.category === "Aquarelle" && (
+  <select
+    name="art_format"
+    value={form.art_format}
+    onChange={handleChange}
+    className="w-full border p-2 rounded"
+  >
+    <option value="">Format</option>
+    <option value="A5">A5</option>
+    <option value="A4">A4</option>
+    <option value="A3">A3</option>
+    <option value="A2">A2</option>
+  </select>
+)}
 
 
 

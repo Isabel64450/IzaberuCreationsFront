@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../src/contex/AuthContext";
 import axiosInstance from "./api/axiosInstance";
-import IconIzaberu from "../src/icons/Izaberu-logo-90x90.gif";
+import IconIzaberu from "../src/icons/Izaberucreations logo2026.png";
 import HeaderCartIcon from "../src/icons/HeaderCartIcon";
 
 export default function Header() {
@@ -30,19 +30,19 @@ export default function Header() {
         </button>
        
         <Link to="/" className="flex items-center gap-3">
-          <img src={IconIzaberu} alt="logo" className="h-12 w-12 rounded-full" />
-          <span className="text-white font-semibold tracking-wide">
+          <img src={IconIzaberu} alt="logo" className="h-20 w-20 rounded-full" />
+           <span className="text-white font-semibold tracking-wide">
             Izaberu Creations
           </span>
         </Link>
         
         <nav className="hidden md:flex items-center gap-8 text-sm text-white/80 relative">
 
-          <Link className="hover:text-[#84a98c] transition" to="/">
+          <Link className="hover:text-[#84a98c] transition" to="/products?category=bijoux">
             Boutique
           </Link>
 
-          <Link className="hover:text-[#84a98c] transition" to="/gallery">
+          <Link className="hover:text-[#84a98c] transition" to="/products?category=aquarelle">
             Galerie
           </Link>
 
@@ -63,6 +63,10 @@ export default function Header() {
 
               {adminOpen && (
                 <div className="absolute right-0 top-8 bg-white text-black shadow-lg rounded-lg w-52 p-3 space-y-2 z-50">
+                   <Link to="/admin" className="block hover:text-green-600 font-semibold">
+                      Dashboard
+                   </Link>
+
 
                   <Link to="admin/products" className="block hover:text-green-600">
                      Produits

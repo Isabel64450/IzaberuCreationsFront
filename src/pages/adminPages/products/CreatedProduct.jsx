@@ -13,7 +13,8 @@ function CreateProduct() {
     height: "",
     width: "",
     category: "",
-    quantity: ""
+    quantity: "",
+    art_format:""
   });
 
   const [images, setImages] = useState([]);
@@ -41,6 +42,10 @@ function CreateProduct() {
     try {
       const payload = {
       ...form,
+       art_format:
+    form.category === "Aquarelle"
+      ? form.art_format
+      : null,
       price: parseFloat(form.price),
       weight: parseFloat(form.weight),
       length: parseFloat(form.length),
@@ -154,15 +159,21 @@ function CreateProduct() {
             <option value="Bijoux">Bijoux</option>
             <option value="Aquarelle">Aquarelle</option>
           </select>
-           <select
-              name="art_format" value={form.art_format} onChange={handleChange} className="w-full border rounded-lg px-4 py-2" required>
-                <option value="">Choisir un format</option>
-                <option value="A5">A5</option>
-                <option value="A4">A4</option>
-                <option value="A3">A3</option>
-                <option value="A2">A2</option>
-  
+           {form.category === "Aquarelle" && (
+               <select
+                 name="art_format"
+                 value={form.art_format}
+                 onChange={handleChange}
+                 className="w-full border rounded-lg px-4 py-2"
+                 required
+                >
+            <option value="">Choisir un format</option>
+            <option value="A5">A5</option>
+            <option value="A4">A4</option>
+            <option value="A3">A3</option>
+            <option value="A2">A2</option>
             </select>
+           )}
           
           <input
             type="file"

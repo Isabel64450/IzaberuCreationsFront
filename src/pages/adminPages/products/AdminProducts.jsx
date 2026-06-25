@@ -99,7 +99,7 @@ export default function AdminProducts() {
       </div>
     <div className="flex justify-between items-center mb-6">  
 
-      <Link to="/gallery" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+      <Link to="/products" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
           Voir la galerie
       </Link>
 
