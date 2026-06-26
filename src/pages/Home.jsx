@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export default function Home() {
   return (
-     <div className="relative z-10 flex flex-col items-center justify-start min-h-screen pt-24 md:pt-28 text-white">
+     <div className="relative z-10 flex flex-col items-center justify-start min-h-screen pt-32 md:pt-28 text-white">
 
       <img
         src={Galop}
