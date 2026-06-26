@@ -18,7 +18,7 @@ function Cart() {
   };
 
 const updateQuantity = async (itemId, newQty) => {
-   console.log("Nouvelle quantité envoyée :", newQty);
+   
   try {
     await axiosInstance.put(`/cart/${itemId}/quantity`, { quantity: newQty });
     if (newQty < 1) {
@@ -43,7 +43,7 @@ const updateQuantity = async (itemId, newQty) => {
 
 
   useEffect(() => {
-    console.log("cartItems updated:", cartItems);
+    
     async function fetchCartItems() {
       setLoading(true);
       setError(null);
@@ -57,7 +57,7 @@ const updateQuantity = async (itemId, newQty) => {
           return;
         }
         const response = await axiosInstance.get(`/cart/${cartId}`);
-        console.log("API response:", response.data);
+        
         setCartItems(response.data);
         fetchItemCount();
       } catch (err) {
@@ -82,14 +82,9 @@ const updateQuantity = async (itemId, newQty) => {
   if (loading) return <p>Chargement du panier...</p>;
   if (error) return <p>{error}</p>;
   const isEmpty = cartItems.length === 0;
-console.log("cartItems =", cartItems);
 
 cartItems.forEach(item => {
-  console.log(
-    "product =", item.product_name,
-    "quantity =", item.quantity,
-    "stock =", item.stock
-  );
+  
 });
  return (
   <div className="min-h-screen flex flex-col bg-[#cad2c5] px-6 pt-32 pb-24 text-[#2f3e46]">

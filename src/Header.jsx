@@ -115,11 +115,11 @@ export default function Header() {
 {mobileOpen && (
   <div className="absolute top-full left-0 w-full bg-[#2f3e46] text-white flex flex-col items-center gap-6 py-6 md:hidden">
 
-    <Link to="/" onClick={() => setMobileOpen(false)}>
+    <Link to="/products?category=bijoux" onClick={() => setMobileOpen(false)}>
       Boutique
     </Link>
 
-    <Link to="/gallery" onClick={() => setMobileOpen(false)}>
+    <Link to="/products?category=aquarelle" onClick={() => setMobileOpen(false)}>
       Galerie
     </Link>
 
